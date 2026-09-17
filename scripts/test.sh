@@ -5,5 +5,5 @@ cd "${0:A:h:h}"
 xcodebuild -project Maccy.xcodeproj -scheme Maccy -configuration Debug \
   -derivedDataPath .build/tests -destination 'platform=macOS' \
   -parallel-testing-enabled NO \
-  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= ENABLE_HARDENED_RUNTIME=NO \
   test "$@"

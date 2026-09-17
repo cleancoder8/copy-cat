@@ -7,7 +7,7 @@ if ! xcodebuild -version >/dev/null 2>&1; then
 fi
 xcodebuild -project Maccy.xcodeproj -scheme Maccy -configuration Release \
   -derivedDataPath .build/xcode -destination 'generic/platform=macOS' \
-  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+  CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= ENABLE_HARDENED_RUNTIME=NO \
   build
 mkdir -p dist
 ditto '.build/xcode/Build/Products/Release/Copy Cat.app' 'dist/Copy Cat.app'

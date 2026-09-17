@@ -136,8 +136,8 @@ class ClipboardTests: XCTestCase {
     XCTAssertFalse(Defaults[.ignoreOnlyNextEvent])
   }
 
-  func testIgnoreApplication() {
-    Defaults[.ignoredApps] = ["com.apple.dt.Xcode", "com.apple.finder"] // Finder is on Bitrise
+  func testIgnoreApplication() throws {
+    Defaults[.ignoredApps] = [try XCTUnwrap(NSWorkspace.shared.frontmostApplication?.bundleIdentifier)]
 
     let hookExpectation = expectation(description: "Hook is called")
     hookExpectation.isInverted = true
@@ -150,9 +150,9 @@ class ClipboardTests: XCTestCase {
     waitForExpectations(timeout: 2)
   }
 
-  func testIgnoreAllApplicationsExcept() {
+  func testIgnoreAllApplicationsExcept() throws {
     Defaults[.ignoreAllAppsExceptListed] = true
-    Defaults[.ignoredApps] = ["com.apple.dt.Xcode", "com.apple.finder"] // Finder is on Bitrise
+    Defaults[.ignoredApps] = [try XCTUnwrap(NSWorkspace.shared.frontmostApplication?.bundleIdentifier)]
 
     let hookExpectation = expectation(description: "Hook is called")
     clipboard.onNewCopy({ (_: HistoryItem) in

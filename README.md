@@ -34,7 +34,7 @@ open "dist/Copy Cat.app"
 
 You can also open `Maccy.xcodeproj` and use the `Maccy` scheme. These internal names are retained for maintainable upstream merges; the built product is **Copy Cat.app**, bundle identifier `local.copycat.app`.
 
-GitHub Actions builds a universal app and runs the upstream unit/UI suites. Download the `Copy-Cat` artifact from a successful [workflow run](https://github.com/cleancoder8/copy-cat/actions). Builds are ad-hoc signed, not Developer ID signed or notarized.
+GitHub Actions builds a universal app and runs the upstream unit/UI suites. Download the `Copy-Cat` artifact from a successful [workflow run](https://github.com/cleancoder8/copy-cat/actions). Builds are ad-hoc signed, not Developer ID signed or notarized. The build scripts disable hardened runtime for these ad-hoc development builds so embedded frameworks can load; Developer ID distribution should enable hardened runtime and sign every component with the same team.
 
 ## Storage and fork differences
 
