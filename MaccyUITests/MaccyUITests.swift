@@ -359,7 +359,7 @@ class MaccyUITests: XCTestCase {
     // XCTest's automation service can send keys without granting the runner
     // process permission to post arbitrary CGEvents.
     XCUIElement.perform(withKeyModifiers: [.command, .shift]) {
-      app.typeKey("c", modifierFlags: [])
+      app.typeKey("c", modifierFlags: [.command, .shift])
       waitUntilPoppedUp()
     }
     waitUntilPoppedUp()
@@ -442,10 +442,10 @@ class MaccyUITests: XCTestCase {
 
   private func cycleWithPopupHotkey(presses: Int) {
     XCUIElement.perform(withKeyModifiers: [.command, .shift]) {
-      app.typeKey("c", modifierFlags: [])
+      app.typeKey("c", modifierFlags: [.command, .shift])
       waitUntilPoppedUp()
       for _ in 1..<presses {
-        app.typeKey("c", modifierFlags: [])
+        app.typeKey("c", modifierFlags: [.command, .shift])
       }
     }
   }
