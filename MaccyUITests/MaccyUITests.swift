@@ -168,9 +168,9 @@ class MaccyUITests: XCTestCase {
     copyToClipboard(rtf1, .rtf)
     popUpWithHotkey()
     XCTAssertEqual(itemTitles[0...1], ["foo", "bar"])
-    scrollIntoViewIfNeeded(app.staticTexts["bar"].firstMatch)
-    hoverAndClick(app.staticTexts["bar"].firstMatch)
-    XCTAssertEqual(pasteboard.data(forType: .rtf), rtf1)
+    scrollIntoViewIfNeeded(items["bar"].firstMatch)
+    hoverAndClick(items["bar"].firstMatch)
+    assertPasteboardDataEquals(rtf2, forType: .rtf)
   }
 
   func testCopyHTML() {
@@ -358,11 +358,8 @@ class MaccyUITests: XCTestCase {
   func testOpenAndClose() throws {
     // XCTest's automation service can send keys without granting the runner
     // process permission to post arbitrary CGEvents.
-    XCUIElement.perform(withKeyModifiers: .command) {
-      XCUIElement.perform(withKeyModifiers: .shift) {
-        app.typeKey("c", modifierFlags: [])
-        waitUntilPoppedUp()
-      }
+    XCUIElement.perform(withKeyModifiers: [.command, .shift]) {
+      app.typeKey("c", modifierFlags: [])
       waitUntilPoppedUp()
     }
     waitUntilPoppedUp()
