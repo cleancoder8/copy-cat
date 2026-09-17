@@ -1,35 +1,47 @@
 # Copy Cat
 
-A native macOS clipboard manager inspired by [Maccy](https://maccy.app/), independently implemented in Swift, SwiftUI, and AppKit. Requires macOS 14 or newer. No third-party dependencies.
+A native macOS clipboard manager based on the complete [Maccy 2.7.1](https://github.com/p0deje/Maccy/tree/2.7.1) source, under its MIT license. Copy Cat is an independent fork, not an official Maccy release. Requires macOS 14 or newer.
 
-## Run
+The original prototype is preserved in the `prototype-0.1.0` Git tag. The current app uses Maccy's actual implementation and test suites instead of approximating its features.
+
+## Use
+
+Open Copy Cat from the menu bar or press **⌘⇧C** (Maccy's default; configurable in Settings). Type to search, then Return to copy. Option-Return pastes; Option-Shift-Return pastes without formatting. Automatic paste requires Accessibility permission, which macOS asks you to grant yourself.
+
+- Text, HTML, rich text, files, PNG, TIFF, JPEG, and HEIC clipboard content
+- Exact, fuzzy, regular-expression, and mixed search
+- Pins with editable titles, shortcut letters, and ordering
+- Copy, automatic paste, and paste without formatting
+- Full previews, image text recognition, color swatches, and source-app icons
+- Configurable shortcuts, popup location and size, appearance, and sorting
+- Launch at login, history limits, clear-on-quit, and system clipboard clearing
+- App allow/deny lists, regex exclusions, and custom ignored clipboard types
+- Pause capture, ignore-next-copy, and confidential/transient type filtering
+- Apple Shortcuts intents and upstream translations
+
+See [usage and keyboard shortcuts](docs/MACCY-UPSTREAM.md) and the [parity notes](docs/PARITY.md).
+
+## Build and test
+
+Full Xcode is required (Command Line Tools alone cannot compile asset catalogs or run XCTest).
 
 ```sh
 ./scripts/build-app.sh
 open "dist/Copy Cat.app"
+./scripts/test.sh -only-testing:MaccyTests
+./scripts/test.sh -only-testing:MaccyUITests
 ```
 
-Copy Cat lives in the menu bar. Press **⌘⇧V** or click the clipboard icon to open it. Search by text or source app, use arrow keys to select a clip, and press Return to copy it. Then use **⌘V** in your destination app. Click the pin to preserve a clip; right-click to delete it. The gear menu contains pause, settings, clear, and quit.
+You can also open `Maccy.xcodeproj` and use the `Maccy` scheme. These internal names are retained for maintainable upstream merges; the built product is **Copy Cat.app**, bundle identifier `local.copycat.app`.
 
-## Included
+GitHub Actions builds a universal app and runs the upstream unit/UI suites. Download the `Copy-Cat` artifact from a successful [workflow run](https://github.com/cleancoder8/copy-cat/actions). Builds are ad-hoc signed, not Developer ID signed or notarized.
 
-- Text and image clipboard history, with image thumbnails
-- Case-insensitive search and a pinned-only filter
-- Duplicate detection that preserves pins
-- Local persistence, configurable history count, and app exclusions
-- Confidential and transient clipboard type filtering
-- Global shortcut, native light/dark appearance, and keyboard navigation
+## Storage and fork differences
 
-History is stored at `~/Library/Application Support/CopyCat/history.json` with owner-only file permissions. It is not encrypted. Apps must mark sensitive copies confidential for automatic filtering to work; excluded app bundle identifiers can be entered in Settings. Capture starts with the next clipboard change after launch. Text entries over 2 MB and images over 10 MB are skipped. Pinned entries are exempt from the history count limit.
+History is local, unencrypted, and separate from Maccy: `~/Library/Application Support/CopyCat/Storage.sqlite`. Preferences use `local.copycat.app`. Copy Cat does not read or modify Maccy's database or preferences.
 
-This first version copies plain text and images. Rich text, file objects, automatic pasting, launch at login, and configurable shortcuts are not implemented. The bundle is locally ad-hoc signed, not notarized for distribution.
+The upstream updater engine is retained, but automatic updates are disabled until a signed Copy Cat feed is configured. “Check now” opens this repository's releases. It never installs official Maccy over Copy Cat. App Store review prompts are disabled because this fork has no App Store listing. These distribution differences mean this is not a byte-for-byte or service-for-service identical release.
 
-## Development
+## Attribution
 
-```sh
-swift build
-swift test # requires Xcode with XCTest
-./scripts/test.sh # standalone checks with Command Line Tools
-```
-
-`Sources/CopyCat/History.swift` handles capture and storage. `HistoryView.swift` contains the interface. `CopyCat.swift` owns the menu bar item and global shortcut.
+Maccy copyright © Alexey Rodionov and contributors. See [LICENSE](LICENSE) and [upstream provenance](docs/UPSTREAM.md).
