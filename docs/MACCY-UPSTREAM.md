@@ -1,3 +1,5 @@
+> This is the original upstream documentation. For Copy Cat, use `local.copycat.app` instead of `org.p0deje.Maccy` in defaults commands. Downloads, support, and updates belong to [the Copy Cat repository](https://github.com/cleancoder8/copy-cat).
+
 > [!WARNING]
 > **Beware of fake websites impersonating Maccy.** Malicious sites (such as `maccyapp.net` and `maccyapp.com`) distribute malware disguised as Maccy. [**maccy.app**](https://maccy.app) is the **only** official website.
 
