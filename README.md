@@ -38,10 +38,12 @@ GitHub Actions builds a universal app and runs the upstream unit/UI suites. Down
 
 ## Storage and fork differences
 
-History is local, unencrypted, and separate from Maccy: `~/Library/Application Support/CopyCat/Storage.sqlite`. Preferences use `local.copycat.app`. Copy Cat does not read or modify Maccy's database or preferences.
+History is local, unencrypted, and separate from Maccy: `~/Library/Application Support/CopyCat/Storage.sqlite`. Preferences use `local.copycat.app`. Copy Cat does not read or modify Maccy's database or preferences. On first launch, prototype text/image history and pins are imported automatically; the original `history.json` remains as a backup. History limits and app exclusions are migrated as well.
 
 The upstream updater engine is retained, but automatic updates are disabled until a signed Copy Cat feed is configured. “Check now” opens this repository's releases. It never installs official Maccy over Copy Cat. App Store review prompts are disabled because this fork has no App Store listing. These distribution differences mean this is not a byte-for-byte or service-for-service identical release.
 
 ## Attribution
 
 Maccy copyright © Alexey Rodionov and contributors. See [LICENSE](LICENSE) and [upstream provenance](docs/UPSTREAM.md).
+
+Copy Cat uses direct-distribution, non-sandboxed entitlements, matching the original prototype. This keeps its existing Application Support location accessible for migration. macOS Accessibility permission is still required for automatic paste. Upstream Mac App Store sandbox entitlements are not used.

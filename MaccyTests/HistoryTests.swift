@@ -1,4 +1,5 @@
 import XCTest
+import SwiftData
 import Defaults
 @testable import Maccy
 
@@ -282,5 +283,37 @@ class HistoryTests: XCTestCase {
     item.title = item.generateTitle()
 
     return item
+  }
+}
+
+// Copy Cat's migration must preserve the prototype without touching Maccy data.
+@MainActor
+final class PrototypeMigrationTests: XCTestCase {
+  func testImportPreservesTextImagesDatesAndPinsAndIsIdempotent() throws {
+    let container = try ModelContainer(for: HistoryItem.self,
+      configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let context = container.mainContext
+    let image = Data([0x89, 0x50, 0x4e, 0x47, 1, 2])
+    let json: [[String: Any]] = [
+      ["text": "Keep me", "date": 1234.0, "pinned": true],
+      ["image": image.base64EncodedString(), "date": 1235.0, "pinned": false]
+    ]
+    let data = try JSONSerialization.data(withJSONObject: json)
+    try Storage.importPrototype(data, into: context)
+    try Storage.importPrototype(data, into: context)
+    let items = try context.fetch(FetchDescriptor<HistoryItem>())
+    XCTAssertEqual(items.count, 2)
+    let text = try XCTUnwrap(items.first { $0.text == "Keep me" })
+    XCTAssertNotNil(text.pin)
+    XCTAssertEqual(text.firstCopiedAt, Date(timeIntervalSinceReferenceDate: 1234))
+    XCTAssertEqual(items.first { $0.imageData != nil }?.imageData, image)
+  }
+
+  func testMalformedLegacyHistoryDoesNotPartiallyImport() throws {
+    let container = try ModelContainer(for: HistoryItem.self,
+      configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+    let data = Data("[{\"text\":\"good\",\"date\":1234,\"pinned\":false},{}]".utf8)
+    XCTAssertThrowsError(try Storage.importPrototype(data, into: container.mainContext))
+    XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<HistoryItem>()), 0)
   }
 }

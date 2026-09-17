@@ -21,3 +21,5 @@ Copy Cat uses the complete upstream 2.7.1 implementation. This is source-level p
 Intentional fork differences: Copy Cat branding, identifiers, database location, support URLs, disabled App Store review prompts, and automatic updates disabled pending an independently signed feed. The default shortcut is now upstream's Command-Shift-C, replacing the prototype's Command-Shift-V.
 
 Maccy's experimental multi-selection/paste-stack feature is disabled in upstream 2.7.1 and remains disabled here. Its presence in source is not advertised as a working feature.
+
+Copy Cat uses direct-distribution, non-sandboxed entitlements, matching the original prototype. This keeps its existing Application Support location accessible for migration. macOS Accessibility permission is still required for automatic paste. Upstream Mac App Store sandbox entitlements are not used.
